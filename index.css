@@ -54,6 +54,7 @@ h1{
     font-weight: 500;
     color: white;
     border: none;
+    cursor: pointer;
 }
 
 #task-list
@@ -92,5 +93,6 @@ h1{
 {
     font-weight: 500;
     font-size: 0.75em;
+    cursor: pointer;
 }
 
