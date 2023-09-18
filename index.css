@@ -80,8 +80,13 @@ h1{
     align-items: baseline;
     margin-bottom: 1rem;
     border-radius: 4px;
+    cursor: move;
 }
 
+.dragging
+{
+    opacity: 0.5;
+}
 
 #item h1
 {

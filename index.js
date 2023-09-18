@@ -23,6 +23,8 @@ function createTaskElement(headingElement,deleteElement)
 {
     const taskElement=document.createElement('div')
     taskElement.id='item'
+    taskElement.classList.add('draggable')
+    taskElement.draggable=true
     taskElement.appendChild(headingElement)
     taskElement.appendChild(deleteElement)
     return taskElement
@@ -37,6 +39,45 @@ function deleteToDoElement(taskElement,headingElement,deleteElement)
     })
 }
 
+function addDraggableEvents(taskElement)
+{
+    taskElement.addEventListener('dragstart',()=>{
+        taskElement.classList.add('dragging')
+    })
+    taskElement.addEventListener('dragend',()=>{
+        taskElement.classList.remove('dragging')
+    })
+}
+
+
+
+function getAfterElement(y)
+{
+    const draggableElements=[...document.querySelectorAll('.draggable:not(.dragging)')]
+    return draggableElements.reduce((closest,child)=>{
+        const box=child.getBoundingClientRect()
+        const offset=y-box.top-box.height/2
+        if(offset<0 && offset>closest.offset)
+        {
+            return {offset: offset,element: child}
+        }
+        else
+        return closest
+    },{offset: Number.NEGATIVE_INFINITY}).element
+}
+
+
+wrapperElement.addEventListener('dragover',e =>{
+    e.preventDefault()
+    const afterElement=getAfterElement(e.clientY)
+    const draggable=document.querySelector('.dragging')
+    console.log(afterElement)
+    if(afterElement==null)
+    wrapperElement.appendChild(draggable)
+    else
+    wrapperElement.insertBefore(draggable,afterElement)
+})
+
 
 addButton.addEventListener('click',()=>{
     if(inputElement.value!='')
@@ -48,5 +89,6 @@ addButton.addEventListener('click',()=>{
         const taskElement=createTaskElement(headingElement,newDeleteElement)
         wrapperElement.appendChild(taskElement)
         deleteToDoElement(taskElement,headingElement,newDeleteElement)
+        addDraggableEvents(taskElement)
     }
 })
